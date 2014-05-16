@@ -10,12 +10,15 @@ module Netdot
     #
     # Arguments (hash):
     #
-    # server   - Netdot server URL
-    # username - Netdot Username
-    # password - Netdot password
-    # retries  - Number of attempts
-    # timeout  - Timeout in seconds
-    # format   - Content format <xml>
+    # server          - Netdot server URL
+    # username        - Netdot Username
+    # password        - Netdot password
+    # retries         - Number of attempts
+    # timeout         - Timeout in seconds
+    # format          - Content format <xml>
+    # ssl_verify      - Verify server cert (default: yes)
+    # ssl_ca_file     - Path to SSL CA cert file 
+    # ssl_ca_dir      - Path to SSL CA cert directory
     #
     # Returns:
     #   Netdot::RestClient object
@@ -30,10 +33,11 @@ module Netdot
       
       argv.each { |k,v| instance_variable_set("@#{k}", v) }
       
-      @timeout ||= 10
-      @retries ||= 3
-      @format  ||= 'xml'
-      
+      @timeout    ||= 10
+      @retries    ||= 3
+      @format     ||= 'xml'
+      defined?(@ssl_verify) or @ssl_verify = true
+
       if ( @format == 'xml' ) 
         begin
           require 'xmlsimple'
@@ -49,6 +53,20 @@ module Netdot
       ua = HTTPClient.new(:agent_name => "Netdot::RestClient/#{self.version}")
       ua.set_cookie_store("cookie.dat")
 
+      # SSL stuff
+      if ( @ssl_verify )
+        if ( @ssl_ca_dir )
+          # We are told to add a certs path
+          # We'll want to clear the default cert store first
+          ua.ssl_config.clear_cert_store
+          ua.ssl_config.set_trust_ca(@ssl_ca_dir)
+        elsif ( @ssl_ca_file )
+          ua.ssl_config.set_trust_ca(@ssl_ca_file)            
+        end
+      else
+        ua.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+
       login_url = @server + '/NetdotLogin'
       
       resp = nil
@@ -60,17 +78,20 @@ module Netdot
           'credential_1'      => @password,
           'permanent_session' => 1,
         }
-        if resp 
+
+        if ( resp.status == 302 )
           ua.save_cookie_store
           @ua = ua
           @base_url = @server + '/rest'
           break
         else
-          $stderr.puts "Connection attempt to #{@server} failed"
+          $stderr.puts "Warning: Connection attempt to #{@server} failed"
         end
       end
-      
-      raise "Could not log into #{@server}" unless resp
+
+      unless ( resp.status == 302 )
+        raise "Could not log into #{@server}. Status Code: '#{resp.status}'"
+      end
 
     end
     

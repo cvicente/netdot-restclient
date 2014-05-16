@@ -10,7 +10,25 @@ describe Netdot::RestClient do
       Netdot::RestClient.new(args)
     }.to raise_error(ArgumentError)
     
+    args[:password] = 'this-is-not-the-password'
+    expect {
+      Netdot::RestClient.new(args)
+    }.to raise_error
+
     args[:password] = 'admin'
+
+    # The following two assume that local server has SSL
+    # enabled with a self-signed cert
+    args[:server] = 'https://localhost/netdot'
+    expect {
+      Netdot::RestClient.new(args)
+    }.to raise_error
+
+    args[:ssl_verify] = false
+    @netdot = Netdot::RestClient.new(args)
+    expect(@netdot).to be_an_instance_of(Netdot::RestClient)
+
+    args[:server] = 'http://localhost/netdot'
     @netdot = Netdot::RestClient.new(args)
     expect(@netdot).to be_an_instance_of(Netdot::RestClient)
     
