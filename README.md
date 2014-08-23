@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-	require 'netdot-restclient'
+	require 'netdot/restclient'
 	require 'pp'
 
 	netdot = Netdot::RestClient.new(

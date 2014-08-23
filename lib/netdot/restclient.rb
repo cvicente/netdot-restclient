@@ -16,6 +16,7 @@ module Netdot
     # retries         - Number of attempts
     # timeout         - Timeout in seconds
     # format          - Content format <xml>
+    # ssl_version     - Specify version of SSL (see httpclient)
     # ssl_verify      - Verify server cert (default: yes)
     # ssl_ca_file     - Path to SSL CA cert file 
     # ssl_ca_dir      - Path to SSL CA cert directory
@@ -65,6 +66,11 @@ module Netdot
         end
       else
         ua.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+
+      # If version given, set it
+      if ( @ssl_version )
+        ua.ssl_config.ssl_version = @ssl_version
       end
 
       login_url = @server + '/NetdotLogin'
