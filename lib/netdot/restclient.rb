@@ -20,6 +20,7 @@ module Netdot
     # ssl_verify      - Verify server cert (default: yes)
     # ssl_ca_file     - Path to SSL CA cert file 
     # ssl_ca_dir      - Path to SSL CA cert directory
+    # cookie_dir      - Path to cookie.dat directory
     #
     # Returns:
     #   Netdot::RestClient object
@@ -37,6 +38,7 @@ module Netdot
       @timeout    ||= 10
       @retries    ||= 3
       @format     ||= 'xml'
+      @cookie_dir ||= '.'
       defined?(@ssl_verify) or @ssl_verify = true
 
       if ( @format == 'xml' ) 
@@ -52,7 +54,7 @@ module Netdot
       end
 
       ua = HTTPClient.new(:agent_name => "Netdot::RestClient/#{self.version}")
-      ua.set_cookie_store("cookie.dat")
+      ua.set_cookie_store("#{@cookie_dir}/cookie.dat")
 
       # SSL stuff
       if ( @ssl_verify )
