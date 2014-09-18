@@ -40,7 +40,7 @@ module Netdot
     # Create A record for given name and IP
     # Will also create PTR record if .arpa zone exists
     def create(name, ip)
-      debug("Creating new DNS records with name:#{name} and ip:#{ip}")
+      Netdot.logger.debug("Creating new DNS records with name:#{name} and ip:#{ip}")
       @connection.post('host', {'name' => name, 'address' => ip})
     end
 
@@ -48,7 +48,7 @@ module Netdot
     # Update A record for given name and IP
     # Will also create PTR record if .arpa zone exists
     def update(name, ip)
-      debug("Updating DNS records with name:#{name} and ip:#{ip}")
+      Netdot.logger.debug("Updating DNS records with name:#{name} and ip:#{ip}")
       delete(name)
       #delete_by_ip(ip)
       create(name, ip)
@@ -61,7 +61,7 @@ module Netdot
       return unless host
 
       # remove any associated IP addresses
-      debug("Removing IP records for #{name}")
+      Netdot.logger.debug("Removing IP records for #{name}")
       host['Ipblock'].keys.each do |id|
         begin
           @connection.delete("host?ipid=#{id}")

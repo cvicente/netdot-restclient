@@ -149,7 +149,8 @@ module Netdot
       if ( resp.status == 200 )
         self.xs.xml_in(resp.content)
       else
-        raise "Could not post to #{url}: #{resp.status}"
+        # raise "Could not post to #{url}: #{resp.status}"
+        raise "Could not post to #{url}: #{resp.inspect}"
       end
     end
 
