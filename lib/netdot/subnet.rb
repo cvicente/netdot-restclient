@@ -66,45 +66,6 @@ module Netdot
     end
 
     ######################################################################
-    # Allocate range of addresses
-    #
-    # Allocates the first N available IPs in the given subnet
-    # and creates A and PTR records, assuming that the subnet
-    # is associated with the appropriate forward and reverse zones
-    #
-    # Arguments:
-    #    subnet address
-    #    subdomain
-    #    number of adresses to allocate
-    # Returns:
-    #    Array of host names
-    #
-    def allocate_range(subnet, subdomain, num)
-      names = []
-
-      num.to_i.times do |i|
-        n = i+1
-        name = "vm-#{n}.#{subdomain}"
-        # Make sure none of the names are already used
-        begin
-          resp = @connection.get("host?name=#{name}")
-        rescue Exception => e
-          # Not Found is expected
-          raise unless (e.message =~ /404/)
-          names.push name
-        else
-          raise "Name #{name} already exists!"
-        end
-      end
-
-      names.each do |n|
-        @connection.post('host', {'name' => n, 'subnet' => subnet})
-      end
-
-      return names
-    end
-
-    ######################################################################
     # Delete subnet and all its records
     #
     # Arguments:
