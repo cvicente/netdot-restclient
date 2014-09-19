@@ -14,11 +14,12 @@ module Netdot
     #
     # Arguments:
     #    IP container block (string)
+    #    CIDR subnet size (optional integer)
     #    description (optional string)
     # Returns:
     #    New subnet ID when successful
     #
-    def allocate(container, description=nil)
+    def allocate(container, prefix=24, description=nil)
 
       # Search for container and get its ID
       cont_id = get_ipblock_id(container)
@@ -55,7 +56,7 @@ module Netdot
         end
 
         # Create subnet
-        args = { 'address' => saddr, 'prefix' => '24', 'status' => 'Subnet' }
+        args = { 'address' => saddr, 'prefix' => prefix.to_s, 'status' => 'Subnet' }
         args['description'] = description unless description.nil?
         resp = @connection.post("Ipblock", args)
         return resp['address'] + '/' + resp['prefix']
