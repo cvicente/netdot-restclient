@@ -21,6 +21,9 @@ module Netdot
     #
     def allocate(container, prefix=24, description=nil)
 
+      # Netdot currently only supports /24 prefixes
+      raise ArgumentError, "Prefix size #{prefix} is not currently supported (must be 24)" unless prefix==24
+
       # Search for container and get its ID
       cont_id = get_ipblock_id(container)
 

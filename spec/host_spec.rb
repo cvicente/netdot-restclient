@@ -6,7 +6,7 @@ describe Netdot::Host do
     @netdot = connect
     @host = Netdot::Host.new(:connection => @netdot) if @host.nil?
     subnet = Netdot::Subnet.new(:connection => @netdot)
-    subnet_id = subnet.allocate('10.0.0.0/8', 26, 'test')
+    subnet_id = subnet.allocate('10.0.0.0/8', 24, 'test')
     @cidr = NetAddr::CIDR.create(subnet_id)
   end
 

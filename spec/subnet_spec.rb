@@ -23,14 +23,20 @@ describe Netdot::Subnet do
 
   context 'creating a new subnet' do
     it 'allocates a new subnet' do
-      subnet_id = @subnet.allocate('10.0.0.0/8', 26, 'test')
-      expect(subnet_id).to match('10.0.*.0/26') 
+      subnet_id = @subnet.allocate('10.0.0.0/8', 24, 'test')
+      expect(subnet_id).to match('10.0.*.0/24') 
+    end
+
+    it 'throws an exception if the prefix is not /24' do
+      expect {
+        subnet_id = @subnet.allocate('10.0.0.0/8', 26)
+      }.to raise_error(ArgumentError)
     end
   end
 
   context 'deleting a subnet' do
     let(:subnet_id) do
-      @subnet.allocate('10.0.0.0/8', 26)
+      @subnet.allocate('10.0.0.0/8', 24)
     end
 
     it 'deletes a subnet' do
