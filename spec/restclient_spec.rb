@@ -1,37 +1,64 @@
-require 'netdot/restclient'
+require 'spec_helper'
 
 describe Netdot::RestClient do
-  before :all do
-    args = {
-      username:  'admin',
-      server:    'http://localhost/netdot'
-    }
-    expect {
-      Netdot::RestClient.new(args)
-    }.to raise_error(ArgumentError)
-    
-    args[:password] = 'this-is-not-the-password'
-    expect {
-      Netdot::RestClient.new(args)
-    }.to raise_error
 
-    args[:password] = 'admin'
+  before :all do
+    @netdot = connect
+  end
+
+  context 'when connecting' do
+
+    it 'raises an exception for incomplete arguments' do
+      args = {
+        username:  'admin',
+        server:    'http://localhost/netdot'
+      }
+      expect {
+        Netdot::RestClient.new(args)
+      }.to raise_error(ArgumentError)
+    end
+
+    it 'raises an exception for an invalid password' do
+     args = {
+        server:    ENV['SERVER'] || 'http://localhost/netdot',
+        username:  ENV['USERNAME'] || 'admin',
+        password:  'this-is-not-the-password'
+      }
+      expect {
+        Netdot::RestClient.new(args)
+      }.to raise_error
+    end
 
     # The following two assume that local server has SSL
     # enabled with a self-signed cert
-    args[:server] = 'https://localhost/netdot'
-    expect {
-      Netdot::RestClient.new(args)
-    }.to raise_error
+    it 'raises an exception if SSL verification fails' do
+      args = {
+        server:    ENV['SERVER'] || 'https://localhost/netdot',
+        username:  ENV['USERNAME'] || 'admin',
+        password:  ENV['PASSWORD'] || 'admin' 
+      }
+      expect {
+        Netdot::RestClient.new(args)
+      }.to raise_error
+    end
 
-    args[:ssl_verify] = false
-    @netdot = Netdot::RestClient.new(args)
-    expect(@netdot).to be_an_instance_of(Netdot::RestClient)
+    it 'does not raise an exception if SSL verification is disabled' do
+      args = {
+        server:     ENV['SERVER'] || 'https://localhost/netdot',
+        username:   ENV['USERNAME'] || 'admin',
+        password:   ENV['PASSWORD'] || 'admin', 
+        ssl_verify: false
+      }
 
-    args[:server] = 'http://localhost/netdot'
-    @netdot = Netdot::RestClient.new(args)
-    expect(@netdot).to be_an_instance_of(Netdot::RestClient)
-    
+      netdot = Netdot::RestClient.new(args)
+      expect(netdot).to be_an_instance_of(Netdot::RestClient)
+    end
+
+    it 'connects to the API' do
+      n = connect 
+      expect(n).to be_an_instance_of(Netdot::RestClient)
+    end
+
   end
 
   context 'when getting' do
@@ -44,7 +71,7 @@ describe Netdot::RestClient do
 
     it 'valid resource as hash' do
       resp = @netdot.get('Entity/1')
-      resp.should be_an_instance_of(Hash)
+      expect(resp).to be_an_instance_of(Hash)
     end
     
     it 'record by id' do
@@ -57,18 +84,17 @@ describe Netdot::RestClient do
       expect(resp['Entity']['1']['name']).to eq('Unknown')
     end
 
-    
   end
 
-   context 'when posting' do
+  context 'when posting' do
 
-     it 'fails to update invalid record' do
+    it 'fails to update invalid record' do
       expect {
         resp = @netdot.post('Foobar/1', {'key' => 'value'} )
       }.to raise_error
-     end
+    end
 
-     it 'creates new record' do
+    it 'creates new record' do
       resp = @netdot.post('Person', 
                           { 'firstname' => 'Joe', 
                             'lastname' => 'Plumber',
@@ -77,9 +103,9 @@ describe Netdot::RestClient do
       expect(resp['firstname']).to eq ('Joe')
       expect(resp['lastname']).to eq ('Plumber')
 
-     end
+    end
 
-     it 'fails to create duplicate record' do
+    it 'fails to create duplicate record' do
       expect {
         resp = @netdot.post('Person', 
                             { 'firstname' => 'Joe', 
@@ -87,7 +113,7 @@ describe Netdot::RestClient do
                               'username' => 'joetubes'
                             })
       }.to raise_error
-     end
+    end
 
   end
 
@@ -103,7 +129,7 @@ describe Netdot::RestClient do
       resp = @netdot.get('Person?lastname=Plumber')
       person_id =  resp['Person'].keys[0]
       resp = @netdot.delete("Person/#{person_id}")
-      expect(resp).to be_true
+      expect(resp).to be_truthy
     end
 
   end
