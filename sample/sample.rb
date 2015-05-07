@@ -5,9 +5,9 @@ require 'netdot'
 require 'netaddr'
 
 # Connect
-netdot_restclient = Netdot::RestClient.new(server: 'http://ipam0-01-unicorn-usnbn1.ci-aws.dev.ec2.dynback.net/netdot',
-                                           username: 'shortness',
-                                           password: 'dyndns')
+netdot_restclient = Netdot::RestClient.new(server: 'http://localhost/netdot',
+                                           username: 'admin',
+                                           password: 'admin')
 
 # Create a Netdot::Host object
 netdot_host = Netdot::Host.new(connection: netdot_restclient)
