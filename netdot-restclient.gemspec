@@ -22,12 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 2.6'
 
-  spec.add_development_dependency 'pry', '~> 0.10'
-  spec.add_development_dependency 'pry-coolline', '~> 0.2'
-  spec.add_development_dependency 'pry-debugger', '~> 0.2'
-  spec.add_development_dependency 'pry-rescue', '~> 1.4'
-  spec.add_development_dependency 'pry-stack_explorer', '~> 0.4'
-
   spec.add_dependency 'httpclient'
   spec.add_dependency 'xml-simple'
 end
