@@ -11,5 +11,5 @@ def connect
     ssl_verify: false
   }
   @netdot = Netdot::RestClient.new(args) if @netdot.nil?
-  return @netdot
+  @netdot
 end
