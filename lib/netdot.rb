@@ -1,16 +1,17 @@
 require 'logger'
 
+# Netdot
 module Netdot
-
   class << self
     attr_accessor :logger
   end
 
+  # NullLogger
   class NullLogger < Logger
-    def initialize(*args)
+    def initialize(*_args)
     end
 
-    def add(*args, &block)
+    def add(*_args, &_block)
     end
   end
 
@@ -19,4 +20,4 @@ end
 
 require 'netdot/restclient'
 require 'netdot/host'
-require 'netdot/subnet'
+require 'netdot/ipblock'

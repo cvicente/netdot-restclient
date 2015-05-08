@@ -50,6 +50,8 @@ The Netdot user manual at:
 
     http://netdot.uoregon.edu
 
+See the sample/sample.rb for sample usage of the Host and Ipblock classes.
+
 ## Contributing
 
 1. Fork it ( https://github.com/cvicente/netdot-restclient/fork )
