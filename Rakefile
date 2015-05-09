@@ -54,3 +54,6 @@ desc 'Use rubocop for style'
 task style: :rubocop
 
 #---------------------------------------------------------------------------
+
+desc 'Build the Gem if style, test, and doc are successful'
+task default: [:rubocop, :spec, :yard, :build]
