@@ -5,7 +5,7 @@ module Netdot
     attr_accessor :connection
 
     # Constructor
-    # @param :connection [Hash] a Netdot::RestClient object
+    # @option argv [Hash] :connection (REQUIRED) a Netdot::RestClient object
     def initialize(argv = {})
       [:connection].each do |k|
         fail ArgumentError, "Missing required argument '#{k}'" unless argv[k]
