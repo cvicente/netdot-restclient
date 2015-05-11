@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'logger', '~>1.2'
   spec.add_development_dependency 'netaddr', '~>1.5'
   spec.add_development_dependency 'rake', '~>10.4'
+  spec.add_development_dependency 'redcarpet', '~>3.2'
   spec.add_development_dependency 'rspec', '~> 2.99'
   spec.add_development_dependency 'rubocop', '~>0.31'
   spec.add_development_dependency 'yard', '~>0.8'
