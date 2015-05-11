@@ -18,6 +18,10 @@ Or install it yourself as:
 
 ## Usage
 
+See file `sample/sample.rb` for example usage of the `Netdot::Host` and `Netdot::Ipblock` classes.
+
+The following example shows how you can use the low level `Netdot::RestClient` class.
+
 	require 'netdot/restclient'
 	require 'pp'
 
@@ -49,8 +53,6 @@ Or install it yourself as:
 The Netdot user manual at:
 
     http://netdot.uoregon.edu
-
-See the sample/sample.rb for sample usage of the Host and Ipblock classes.
 
 ## Contributing
 
