@@ -9,18 +9,18 @@ module Netdot
     attr_accessor :format, :base_url, :ua, :xs
 
     # Constructor and login method
-    # @param :server [String] Netdot server URL
-    # @param :username [String] Netdot Username
-    # @param :password [String] Netdot password
-    # @param :retries [String] (optional) Number of attempts
-    # @param :timeout [String] (optional) Timeout in seconds
-    # @param :format [String] (optional) Content format <xml>
-    # @param :ssl_version [String] (optional) Specify version of SSL;
+    # @option argv [String] :server (REQUIRED) Netdot server URL
+    # @option argv [String] :username (REQUIRED) Netdot Username
+    # @option argv [String] :password (REQUIRED) Netdot password
+    # @option argv [Fixnum] :retries (3) number of attempts
+    # @option argv [Fixnum] :timeout (10) timeout in seconds
+    # @option argv [String] :format (xml) content format <xml>
+    # @option argv [String] :ssl_version ('') specify version of SSL;
     #   see HTTPClient
-    # @param :ssl_verify [String] (optional) Verify server cert (default: yes)
-    # @param :ssl_ca_file [String] (optional) Path to SSL CA cert file
-    # @param :ssl_ca_dir [String] (optional) Path to SSL CA cert directory
-    # @param :cookie_file [String] (optional) Cookie filename
+    # @option argv [String] :ssl_verify (true) verify server cert (default: yes)
+    # @option argv [String] :ssl_ca_file ('') path to SSL CA cert file
+    # @option argv [String] :ssl_ca_dir ('') path to SSL CA cert directory
+    # @option argv [String] :cookie_file ('./cookie.dat') cookie filename
     def initialize(argv = {})
       [:server, :username, :password].each do |k|
         fail ArgumentError, "Missing required argument '#{k}'" unless argv[k]
