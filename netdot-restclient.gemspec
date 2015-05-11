@@ -26,6 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~>0.31'
   spec.add_development_dependency 'yard', '~>0.8'
 
-  spec.add_dependency 'httpclient', '~>2.6'
-  spec.add_dependency 'xml-simple', '~>1.1'
+  spec.add_runtime_dependency 'httpclient', '~>2.6'
+  spec.add_runtime_dependency 'xml-simple', '~>1.1'
 end
