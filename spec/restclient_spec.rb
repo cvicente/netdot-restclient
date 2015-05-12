@@ -35,9 +35,14 @@ describe Netdot::RestClient do
         username:  ENV['USERNAME'] || 'admin',
         password:  ENV['PASSWORD'] || 'admin'
       }
-      expect do
-        Netdot::RestClient.new(args)
-      end.to raise_error
+      if ENV['SERVER'] =~ /^https:/
+        expect do
+          Netdot::RestClient.new(args)
+        end.to raise_error
+      else
+        STDERR.puts 'Warning: Skipping the following test' \
+          ", as URL scheme is not 'https:'"
+      end
     end
 
     it 'does not raise an exception if SSL verification is disabled' do
