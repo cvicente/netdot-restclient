@@ -51,6 +51,22 @@ module Netdot
       @connection.post('host', 'name' => name, 'address' => ip)
     end
 
+    # Creates a DNS A record for the specified name, using the next
+    # available IP address in the given subnet.
+    # Will also create PTR record if .arpa zone exists.
+    # @param name [String]
+    # @param subnet [String]
+    # @return [String] IP address allocated
+    def create_next(name, subnet)
+      Netdot.logger.debug("Creating new DNS records with name:#{name}" \
+      " and in subnet:#{subnet}")
+      host = @connection.post('host', 'name' => name, 'subnet' => subnet)
+      pp host
+      r = find_by_name(host['name'])
+      ipid = r["Ipblock"].keys.first
+      r["Ipblock"][ipid]["address"]
+    end
+
     # Updates the DNS A record for the sepcified name and IP.
     # Will also create PTR record if .arpa zone exists.
     # @param name [String]

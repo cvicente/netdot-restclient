@@ -45,8 +45,8 @@ describe Netdot::Ipblock do
       end.to raise_error
     end
 
-    it 'return nil for an empty string' do
-      expect(@ipblock.find_by_descr('')).to be_nil
+    it 'return nil for a non-existent string' do
+      expect(@ipblock.find_by_descr('21684dfgergscvfwr')).to be_nil
     end
 
     it 'return nil if not found' do
