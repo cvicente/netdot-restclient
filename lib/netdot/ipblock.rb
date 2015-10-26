@@ -21,9 +21,8 @@ module Netdot
     # @return [String] new Ipblock id, or nil
     def allocate(container, prefix = 24, description = nil)
       # Netdot currently only supports /24 prefixes
-      fail ArgumentError,
-           "Prefix size #{prefix} is not currently supported (must be 24)" \
-        unless prefix == 24
+      fail ArgumentError, "Prefix size #{prefix} is not currently supported \
+                          (must be 24)" unless prefix == 24
 
       # Search for container and get its ID
       cont_id = find_by_addr(container)
@@ -111,8 +110,8 @@ module Netdot
     # @return [Array<Ipblock>]
     def find_by_descr(descr)
       @connection.get("Ipblock?description=#{descr}")['Ipblock']
-      rescue => e
-        raise unless e.message =~ /404/
+    rescue => e
+      raise unless e.message =~ /404/
     end
   end
 end

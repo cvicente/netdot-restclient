@@ -1,13 +1,12 @@
 require 'spec_helper'
 
-
 describe Netdot::Host do
   before :all do
     @netdot = connect
     @ipblock = Netdot::Ipblock.new(connection: @netdot)
     @host = Netdot::Host.new(connection: @netdot) if @host.nil?
     @test_net = '198.18.254.0/24' # RFC 2544
-    @netdot.post('Ipblock', {'address' => @test_net, 'status' => 'Subnet'})
+    @netdot.post('Ipblock', 'address' => @test_net, 'status' => 'Subnet')
     @cidr = NetAddr::CIDR.create(@test_net)
   end
 

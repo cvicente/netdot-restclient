@@ -62,8 +62,8 @@ module Netdot
       " and in subnet:#{subnet}")
       host = @connection.post('host', 'name' => name, 'subnet' => subnet)
       r = find_by_name(host['name'])
-      ipid = r["Ipblock"].keys.first
-      r["Ipblock"][ipid]["address"]
+      ipid = r['Ipblock'].keys.first
+      r['Ipblock'][ipid]['address']
     end
 
     # Updates the DNS A record for the sepcified name and IP.
