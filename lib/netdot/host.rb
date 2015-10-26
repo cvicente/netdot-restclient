@@ -61,7 +61,6 @@ module Netdot
       Netdot.logger.debug("Creating new DNS records with name:#{name}" \
       " and in subnet:#{subnet}")
       host = @connection.post('host', 'name' => name, 'subnet' => subnet)
-      pp host
       r = find_by_name(host['name'])
       ipid = r["Ipblock"].keys.first
       r["Ipblock"][ipid]["address"]
