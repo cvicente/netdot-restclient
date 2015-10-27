@@ -24,7 +24,7 @@ describe Netdot::RestClient do
       }
       expect do
         Netdot::RestClient.new(args)
-      end.to raise_error
+      end.to raise_error(RuntimeError)
     end
 
     # The following two assume that local server has SSL
@@ -38,7 +38,7 @@ describe Netdot::RestClient do
       if ENV['SERVER'] =~ /^https:/
         expect do
           Netdot::RestClient.new(args)
-        end.to raise_error
+        end.to raise_error(RuntimeError)
       else
         STDERR.puts 'Warning: Skipping the following test' \
           ", as URL scheme is not 'https:'"
@@ -67,7 +67,7 @@ describe Netdot::RestClient do
     it 'invalid resource raises exception' do
       expect do
         @netdot.get('foobar')
-      end.to raise_error
+      end.to raise_error(RuntimeError)
     end
 
     it 'valid resource as hash' do
@@ -90,7 +90,7 @@ describe Netdot::RestClient do
     it 'fails to update invalid record' do
       expect do
         @netdot.post('Foobar/1', 'key' => 'value')
-      end.to raise_error
+      end.to raise_error(RuntimeError)
     end
 
     it 'creates new record' do
@@ -110,7 +110,7 @@ describe Netdot::RestClient do
                      'lastname' => 'Plumber',
                      'username' => 'joetubes'
                     )
-      end.to raise_error
+      end.to raise_error(RuntimeError)
     end
   end
 
@@ -118,7 +118,7 @@ describe Netdot::RestClient do
     it 'fails to delete invalid record' do
       expect do
         @netdot.delete('FooBar/1234')
-      end.to raise_error
+      end.to raise_error(RuntimeError)
     end
 
     it 'deletes exiting record' do

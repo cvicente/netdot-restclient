@@ -70,7 +70,7 @@ module Netdot
           return r['Ipblock'][id]['address']
         end
       end
-      fail RuntimeError, "Failed to find the allocated address"
+      fail 'Failed to find the allocated address'
     end
 
     # Updates the DNS A record for the sepcified name and IP.

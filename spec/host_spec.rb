@@ -6,8 +6,11 @@ describe Netdot::Host do
     @ipblock = Netdot::Ipblock.new(connection: @netdot)
     @host = Netdot::Host.new(connection: @netdot) if @host.nil?
     @test_net = '198.18.254.0/24' # RFC 2544
+    @test_6net = '2001:db8:ffff::/64' # RFC 3839
     @netdot.post('Ipblock', 'address' => @test_net, 'status' => 'Subnet')
+    @netdot.post('Ipblock', 'address' => @test_6net, 'status' => 'Subnet')
     @cidr = NetAddr::CIDR.create(@test_net)
+    @cidr6 = NetAddr::CIDR.create(@test_6net)
   end
 
   context 'when creating a new Host instance' do
@@ -31,10 +34,16 @@ describe Netdot::Host do
       expect(h['name']).to match('rspec-test0-01-yyy')
     end
 
-    it 'creates new records for given name in given subnet' do
+    it 'creates new records for given name in given v4 subnet' do
       h = @host.create_next('rspec-test0-02-yyy', @cidr.to_s)
       expect(h).to be_truthy
       expect(h).to match(@cidr.nth(2))
+    end
+
+    it 'creates new records for given name in given v6 subnet' do
+      h = @host.create_next('rspec-test0-02-yyy', @cidr6.to_s(Short: true))
+      expect(h).to be_truthy
+      expect(h).to match(@cidr6.nth(1, Short: true))
     end
 
     it 'updates an existing allocation' do
@@ -67,6 +76,9 @@ describe Netdot::Host do
   context 'when cleaning up' do
     it 'deletes test subnet and all its children' do
       expect(@ipblock.delete(@test_net, true)).to be_truthy
+    end
+    it 'deletes test v6 subnet and all its children' do
+      expect(@ipblock.delete(@test_6net, true)).to be_truthy
     end
   end
 end

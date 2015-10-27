@@ -42,7 +42,7 @@ describe Netdot::Ipblock do
     it 'raises an exception for an improperly formatted name' do
       expect do
         @ipblock.find_by_descr('rspec-Ipblock-one&Foo=bar')
-      end.to raise_error
+      end.to raise_error(RuntimeError)
     end
 
     it 'return nil for a non-existent string' do
