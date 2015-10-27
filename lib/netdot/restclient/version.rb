@@ -2,7 +2,7 @@
 module Netdot
   # RestClient
   class RestClient
-    VERSION = '2.0.2'
+    VERSION = '2.0.3'
 
     def version
       VERSION

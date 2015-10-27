@@ -62,8 +62,15 @@ module Netdot
       " and in subnet:#{subnet}")
       host = @connection.post('host', 'name' => name, 'subnet' => subnet)
       r = find_by_name(host['name'])
-      ipid = r['Ipblock'].keys.first
-      r['Ipblock'][ipid]['address']
+      # The issue here is that the response only gives us the RR
+      # which can have both IPv4 and IPv6 addresses, so we need to
+      # try to pick the right one to return
+      r['Ipblock'].keys.each do |id|
+        if (r['Ipblock'][id]['parent'] == subnet)
+          return r['Ipblock'][id]['address']
+        end
+      end
+      fail RuntimeError, "Failed to find the allocated address"
     end
 
     # Updates the DNS A record for the sepcified name and IP.
